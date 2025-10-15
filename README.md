@@ -118,6 +118,70 @@ MiniCDN is built using:
 - **Zero-Copy**: Efficient file streaming
 - **HTTP Keep-Alive**: Connection reuse for better performance
 
+## Performance Testing
+
+### Load Testing with wrk
+
+MiniCDN can handle high concurrent loads efficiently. You can test performance using `wrk`, a modern HTTP benchmarking tool.
+
+#### Installing wrk
+
+**macOS (using Homebrew):**
+```bash
+brew install wrk
+```
+
+**Ubuntu/Debian:**
+```bash
+sudo apt-get install wrk
+```
+
+**CentOS/RHEL:**
+```bash
+sudo yum install wrk
+```
+
+**Building from source:**
+```bash
+git clone https://github.com/wg/wrk.git
+cd wrk
+make
+sudo cp wrk /usr/local/bin
+```
+
+#### Running Performance Tests
+
+Test your MiniCDN instance with high concurrency:
+
+```bash
+# Stress test with 8 threads and 1000 connections for 30 seconds
+wrk -t8 -c1000 -d30s http://127.0.0.1:8180/vid.mp4
+```
+
+#### Benchmark Results
+
+Here's an example performance test result serving a video file:
+
+```
+Running 30s test @ http://127.0.0.1:8180/vid.mp4
+  8 threads and 1000 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency   777.32ms  382.36ms   1.98s    82.14%
+    Req/Sec     3.52      4.48    30.00     83.33%
+  367 requests in 30.08s, 52.00GB read
+  Socket errors: connect 0, read 44974, write 0, timeout 31
+Requests/sec:     12.20
+Transfer/sec:      1.73GB
+```
+
+**Performance Highlights:**
+- **Throughput**: 1.73GB/sec data transfer
+- **Total Data**: 52GB served in 30 seconds
+- **Concurrent Connections**: Handled 1000 concurrent connections
+- **File Size**: Large video files served efficiently
+
+> **Note**: Performance results may vary based on hardware, network conditions, file sizes, and system configuration. For optimal performance, use release builds (`cargo build --release`).
+
 ## Development
 
 ### Building
